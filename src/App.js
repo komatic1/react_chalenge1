@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
-function App() {
+import UserList from "./components/Users/UserList/UserList";
+import UserInput from "./components/Users/UserInput/UserInput";
+
+const App = () => {
+  const [users, setUsers] = useState([
+    { name: "Вася", age: 10, id: "u1" },
+    { name: "Пупка", age: 11, id: "u2" },
+    { name: "Пупа", age: 12, id: "u3" },
+    { name: "Пупа", age: 13, id: "u4" },
+  ]);
+
+  const addUserHandler = (inputTextName, inputTextAge) => {
+    setUsers((prevUsers) => {
+      const updatedUsers = [...prevUsers];
+      updatedUsers.unshift({
+        name: inputTextName, // нужно новое имя
+        age: inputTextAge, // и возраст
+        id: Math.random().toString(),
+      });
+      return updatedUsers;
+    });
+  };
+
+  let content = (
+    <p style={{ textAlign: "center" }}>Пользователей не найдено! Добавить?</p>
+  );
+
+  if (users.length > 0) {
+    content = <UserList items={users} />;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <section id="user-form">
+        <UserInput onAddTask={addUserHandler} />
+      </section>
+      <section id="users">{content}</section>
     </div>
   );
-}
+};
 
 export default App;
